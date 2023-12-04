@@ -1,12 +1,12 @@
 const MongoClient = require("mongodb").MongoClient;
-const ObjectID = require("mongodb").ObjectID;
+// const ObjectID = require("mongodb").ObjectID;
 
 function MongoUtils() {
   const mu = {},
     hostname = "localhost",
     port = 27017,
-    dbName = "lotteryTests",
-    colName = "grades";
+    dbName = "bridge",
+    colName = "teams";
 
   mu.connect = () => {
     const client = new MongoClient(`mongodb://${hostname}:${port}`, {
@@ -15,37 +15,37 @@ function MongoUtils() {
     return client.connect();
   };
 
-  mu.grades = {};
+  mu.teams = {};
 
-  mu.grades.find = query =>
+  mu.teams.find = query =>
     mu.connect().then(client => {
-      const gradesCol = client.db(dbName).collection(colName);
+      const teamsCol = client.db(dbName).collection(colName);
 
       console.log("query", query);
 
-      return gradesCol
+      return teamsCol
         .find(query)
-        .limit(20)
-        .sort({ timestamp: -1 })
+        .limit(10)
+        .sort({ team_id: 1 })
         .toArray()
         .finally(() => client.close());
     });
 
-  mu.grades.findOneByID = id =>
+  mu.teams.findOneByID = id =>
     mu.connect().then(client => {
-      const gradesCol = client.db(dbName).collection(colName);
+      const teamsCol = client.db(dbName).collection(colName);
 
       // when searching by id we need to create an ObjectID
-      return gradesCol
-        .findOne({ _id: new ObjectID(id) })
+      return teamsCol
+        .findOne({ team_id: id })
         .finally(() => client.close());
     });
 
-  mu.grades.insert = grade =>
+  mu.teams.insert = team =>
     mu.connect().then(client => {
-      const gradesCol = client.db(dbName).collection(colName);
+      const teamsCol = client.db(dbName).collection(colName);
 
-      return gradesCol.insertOne(grade).finally(() => client.close());
+      return teamsCol.insertOne(team).finally(() => client.close());
     });
   return mu;
 }

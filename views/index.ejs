@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Grades</title>
+    <title>Teams</title>
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
@@ -18,35 +18,11 @@
     <div class="container">
       <div class="row">
         <div class="col-12 col-md-8">
-          <h1>Grades</h1>
+          <h1>Teams</h1>
 
-          <div class="input-group">
-            <form id="formSearch" action="/searchSS">
-              <input
-                name="q"
-                type="text"
-                class="form-control"
-                placeholder="search"
-              />
-              <button class="btn btn-secondary" type="submit">Search with AJAX</button>
-            </form>
-          </div>
-
-          <div class="input-group">
-            <form id="formSearchSS" action="/searchSS">
-              <input
-                name="q"
-                type="text"
-                class="form-control"
-                placeholder="search"
-              />
-              <button class="btn btn-secondary" type="submit">Search with Server Side Rendering</button>
-            </form>
-          </div>
-
-          <ul id="grades">
-            <% grades.forEach( (grade) => { %>
-            <li><%= grade.name %> : <%= grade.grade %> <a class="btn btn-info" href=<%- "/grade/" + grade._id %>> Details </a></li>
+          <ul id="teams">
+            <% teams.forEach( (team) => { %>
+            <li>Team <%= team.team_id %> : <%= team.team_name %> <a class="btn btn-info" href=<%- "/team/" + team.team_id %>> Details </a><button class="btn btn-info delete-btn" data-id="<%= team.team_id %>">Delete</button></li>
             <% }) %>
           </ul>
         </div>
@@ -64,8 +40,6 @@
     </div>
     <!-- container -->
 
-    <script src="/javascripts/listGrades.js"></script>
-
     <script
       src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
       integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
@@ -81,5 +55,32 @@
       integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
       crossorigin="anonymous"
     ></script>
+    <script>
+      // Add an event listener to handle the click on delete buttons
+      document.querySelectorAll('.delete-btn').forEach(button => {
+        button.addEventListener('click', function() {
+          const teamId = this.getAttribute('data-id');
+          deleteTeam(teamId);
+        });
+      });
+    
+      function deleteTeam(teamId) {
+        // Use fetch API or any other method to send a DELETE request to your server
+        fetch(`/team/delete/${teamId}`, {
+          method: 'DELETE',
+        })
+        .then(response => {
+          if (response.ok) {
+            console.log(`Team with ID ${teamId} deleted successfully.`);
+            // Optionally, update the UI or reload the page
+          } else {
+            console.error(`Error deleting team with ID ${teamId}.`);
+          }
+        })
+        .catch(error => {
+          console.error(`Error deleting team with ID ${teamId}: ${error}`);
+        });
+      }
+    </script>
   </body>
 </html>

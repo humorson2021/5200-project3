@@ -1,32 +1,73 @@
-<form action="/grades/create" method="POST">
-  <div class="form-group">
-    <label id="name">
-      <span>Name:</span>
-      <input class="form-control" type="text" name="name" required />
-    </label>
-  </div>
-
-  <div class="form-group">
-    <label id="grade">
-      <span>Grade:</span>
-      <input
-        class="form-control"
-        type="range"
-        min="-1"
-        max="2"
-        step="1"
-        value="0"
-        name="grade"
-        id="inGrade"
-        required
-      />
-      <output for="inGrade"></output>
-    </label>
-  </div>
+<form action="/teams/create" method="POST">
+    <div class="form-group">
+      <label for="team_id">
+        <span>Team ID:</span>
+        <input
+          class="form-control"
+          type="number"
+          name="team_id"
+          id="team_id"
+          required
+        />
+      </label>
+    </div>
+  
+    <div class="form-group">
+      <label for="team_name">
+        <span>Team Name:</span>
+        <input
+          class="form-control"
+          type="text"
+          name="team_name"
+          id="team_name"
+          required
+        />
+      </label>
+    </div>
+  
+    <div class="form-group">
+      <label for="score">
+        <span>Score:</span>
+        <input
+          class="form-control"
+          type="number"
+          name="score"
+          id="score"
+          min="0"
+          max="80"
+          step="0.01"
+          required
+        />
+      </label>
+    </div>
+  
+    <div class="form-group">
+      <label for="players">
+        <span>Players (JSON format):</span>
+        <textarea
+          class="form-control"
+          name="players"
+          id="players"
+          required
+        ></textarea>
+      </label>
+    </div>
+  
+    <div class="form-group">
+      <label for="rounds">
+        <span>Rounds (JSON format):</span>
+        <textarea
+          class="form-control"
+          name="rounds"
+          id="rounds"
+          required
+        ></textarea>
+      </label>
+    </div>
 
   <div class="form-group">
     <button class="btn btn-primary" type="submit">Create</button>
   </div>
 </form>
 
-<script src="./javascripts/gradesForm.js"></script>
+<!-- <script src="./javascripts/gradesForm.js"></script> -->

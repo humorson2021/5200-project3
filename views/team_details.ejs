@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Grades</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-12 col-md-8">
+
+          <div id="teamDetails">
+            <h1>Team <%= team.team_id %> Details</h1>
+            <p>Team Name: <%= team.team_name %></p>
+            <p>Score: <%= team.score %></p>
+          
+            <h3>Players</h3>
+            <ul>
+              <% if (team.players && team.players.length > 0) { %>
+                <% team.players.forEach((playerObj) => { %>
+                  <% const player = Object.values(playerObj)[0]; %>
+                  <li>
+                    Player <%= player.player_id %>: <%= player.name %> (Sex: <%= player.sex %>, Contact: <%= player.contact %>)
+                  </li>
+                <% }) %>
+              <% } else { %>
+                <li>No players available.</li>
+              <% } %>
+            </ul>
+
+            <h3>Rounds</h3>
+            <ul>
+              <% if (team.rounds && team.rounds.length > 0) { %>
+                <% team.rounds.forEach((roundObj) => { %>
+                  <% const round = Object.values(roundObj)[0]; %>
+                  <li>
+                    Round <%= round.round_id %>: opposite team id <%= round.opposite_team_id %> (VP: <%= round.VP %>)
+                    <ul>
+                        <% round.boards.forEach((boardObj) => { %>
+                          <% const board = Object.values(boardObj)[0]; %>
+                          <li>
+                            Board <%= board.board_id %>: Result: <%= board.result %>
+                          </li>
+                        <% }) %>
+                    </ul>
+                  </li>
+                <% }) %>
+                <% } else { %>
+                  <li>No rounds available.</li>
+                <% } %>
+            </ul>
+          </div>
+        </div>
+        <!-- grades col-8 -->
+      </div>
+      <!-- create col-4 -->
+
+      <%- include("./footer.ejs") %>
+    </div>
+    <!-- container -->
+
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+      integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

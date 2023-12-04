@@ -9,57 +9,54 @@ const buildQuery = query => ({
 
 /* GET home page. */
 router.get("/", function(req, res) {
-  mu.grades.find().then(grades =>
+  mu.teams.find().then(teams =>
     res.render("index", {
-      grades
-    })
-  );
-});
-
-/* GET home page. */
-router.get("/searchSS", function(req, res) {
-  const query = buildQuery(req.query.q);
-
-  console.log(req.query);
-
-  mu.grades.find(query).then(grades =>
-    res.render("index", {
-      grades
+      teams
     })
   );
 });
 
 //  Data endpoint
-router.get("/grades/:query", (req, res) => {
+router.get("/teams/:query", (req, res) => {
   console.log("params", req.params);
   const query = buildQuery(req.params.query);
 
-  mu.grades.find(query).then(grades => res.json(grades));
+  mu.teams.find(query).then(teams => res.json(teams));
 });
 
-router.post("/grades/create", (req, res) => {
+router.post("/teams/create", (req, res) => {
   console.log("params", req.body);
 
-  const grade = {
-    name: req.body.name,
-    grade: +req.body.grade,
-    timestamp: new Date()
+  const team = {
+    team_id: parseInt(req.body.team_id),
+    team_name: req.body.team_name,
+    score: parseFloat(req.body.score),
+    players: JSON.parse(req.body.players),
+    rounds: JSON.parse(req.body.rounds)
   };
 
-  mu.grades.insert(grade).then(res.redirect("/"));
+  mu.teams.insert(team).then(res.redirect("/"));
 });
 
-// Server side rendering one grade
-router.get("/grade/:id", (req, res) => {
-  console.log("grade/id params", req.params);
+// Server side rendering one team
+router.get("/team/:id", (req, res) => {
+  console.log("team/id params", req.params);
 
-  mu.grades
-    .findOneByID(req.params.id)
-    .then(grade => {
-      console.log("grade", grade);
-      return grade;
+  mu.teams
+    .findOneByID(parseInt(req.params.id))
+    .then(team => {
+      console.log("team", team);
+      return team;
     })
-    .then(grade => res.render("grade_details", { grade }));
+    .then(team => res.render("team_details", { team }));
 });
+
+router.delete("/team/delete/:id", (req, res) => {
+  const teamIdToDelete = parseInt(req.params.id); // Parse the ID as an integer
+
+  // Use MongoDB to delete the team with the specified ID
+  mu.teams.deleteOne({ "team_id": teamIdToDelete });
+});
+
 
 module.exports = router;
