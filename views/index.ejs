@@ -22,7 +22,8 @@
 
           <ul id="teams">
             <% teams.forEach( (team) => { %>
-            <li>Team <%= team.team_id %> : <%= team.team_name %> <a class="btn btn-info" href=<%- "/team/" + team.team_id %>> Details </a><button class="btn btn-info delete-btn" data-id="<%= team.team_id %>">Delete</button></li>
+            <li>Team <%= team.team_id %> : <%= team.team_name %> <a class="btn btn-info" href=<%- "/team/" + team.team_id %>> Details </a>
+              <button class="btn btn-info delete-btn" data-id="<%= team.team_id %>">Delete</button></li>
             <% }) %>
           </ul>
         </div>
@@ -55,32 +56,29 @@
       integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
       crossorigin="anonymous"
     ></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script>
-      // Add an event listener to handle the click on delete buttons
-      document.querySelectorAll('.delete-btn').forEach(button => {
-        button.addEventListener('click', function() {
-          const teamId = this.getAttribute('data-id');
-          deleteTeam(teamId);
+      $(document).ready(function () {
+        $(".delete-btn").on("click", function () {
+          const teamId = $(this).data("id");
+    
+          // Send an AJAX request to your server
+          jQuery.ajax({
+            url: `/team/delete/${teamId}`,
+            method: "DELETE",
+            success: function (data) {
+              // Handle success (if needed)
+              console.log("Team deleted successfully");
+              // Optionally, you can reload the page or update the UI
+              location.reload();
+            },
+            error: function (error) {
+              // Handle error (if needed)
+              console.error("Error deleting team", error);
+            },
+          });
         });
       });
-    
-      function deleteTeam(teamId) {
-        // Use fetch API or any other method to send a DELETE request to your server
-        fetch(`/team/delete/${teamId}`, {
-          method: 'DELETE',
-        })
-        .then(response => {
-          if (response.ok) {
-            console.log(`Team with ID ${teamId} deleted successfully.`);
-            // Optionally, update the UI or reload the page
-          } else {
-            console.error(`Error deleting team with ID ${teamId}.`);
-          }
-        })
-        .catch(error => {
-          console.error(`Error deleting team with ID ${teamId}: ${error}`);
-        });
-      }
     </script>
   </body>
 </html>

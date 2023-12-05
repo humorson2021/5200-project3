@@ -52,10 +52,9 @@ router.get("/team/:id", (req, res) => {
 });
 
 router.delete("/team/delete/:id", (req, res) => {
-  const teamIdToDelete = parseInt(req.params.id); // Parse the ID as an integer
+  const teamIdToDelete = parseInt(req.params.id);
 
-  // Use MongoDB to delete the team with the specified ID
-  mu.teams.deleteOne({ "team_id": teamIdToDelete });
+  mu.teams.delete(teamIdToDelete);
 });
 
 

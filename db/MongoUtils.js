@@ -47,7 +47,16 @@ function MongoUtils() {
 
       return teamsCol.insertOne(team).finally(() => client.close());
     });
+
+  mu.teams.delete = teamIdToDelete =>
+    mu.connect().then(client => {
+      const teamsCol = client.db(dbName).collection(colName);
+
+      return teamsCol.deleteOne({"team_id": teamIdToDelete}).finally(() => client.close());
+    });
+
   return mu;
+
 }
 
 module.exports = MongoUtils();
