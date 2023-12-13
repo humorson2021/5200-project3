@@ -16,6 +16,14 @@ router.get("/", function(req, res) {
   );
 });
 
+router.get("/rank", function(req, res) {
+  mu.teams.getRank().then(teams =>
+    res.render("rank", {
+      teams
+    })
+  );
+});
+
 //  Data endpoint
 router.get("/teams/:query", (req, res) => {
   console.log("params", req.params);
