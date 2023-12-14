@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 
 const mu = require("../db/MongoUtils.js");
+const ranking = require("../db/Mongo&Redis.js");
 
 const buildQuery = query => ({
   name: new RegExp(`.*${query}.*`, "i")
@@ -16,12 +17,16 @@ router.get("/", function(req, res) {
   );
 });
 
-router.get("/rank", function(req, res) {
-  mu.teams.getRank().then(teams =>
+router.get("/rank", async function(req, res) {
+  try {
+    const teams = await ranking();
     res.render("rank", {
       teams
-    })
-  );
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error!" });
+  }
 });
 
 //  Data endpoint

@@ -21,8 +21,8 @@
           <h1>Teams Ranking</h1>
 
           <ul id="teams">
-            <% teams.forEach( (team) => { %>
-            <li>Team <%= team.team_id %></li>
+            <% teams.forEach( (team, index) => { %>
+            <li>No. <%= index + 1 %> is <%= team.team_name %> (team <%= team.team_id %>)</li>
             <% }) %>
           </ul>
         </div>

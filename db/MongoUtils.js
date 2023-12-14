@@ -1,7 +1,5 @@
 const MongoClient = require("mongodb").MongoClient;
 // const ObjectID = require("mongodb").ObjectID;
-const redis = require("redis");
-const redisClient = redis.createClient();
 
 function MongoUtils() {
   const mu = {},
@@ -18,10 +16,6 @@ function MongoUtils() {
   };
 
   mu.teams = {};
-
-  const updateRank = (team) => {
-    redisClient.zAdd("RankOfTeams", [{score: team.score, value: team.team_id}]);
-  };
 
   mu.teams.find = query =>
     mu.connect().then(client => {
@@ -52,7 +46,6 @@ function MongoUtils() {
       const teamsCol = client.db(dbName).collection(colName);
 
       return teamsCol.insertOne(team).finally(() => {
-        updateRank(team);
         client.close();
       });
 
@@ -63,20 +56,9 @@ function MongoUtils() {
       const teamsCol = client.db(dbName).collection(colName);
 
       return teamsCol.deleteOne({"team_id": teamIdToDelete}).finally(() => {
-        redisClient.zRem("RankOfTeams", teamIdToDelete);
         client.close();
       });
     });
-
-  mu.teams.getRank = () => {
-    const res = redisClient.zRange("RankOfTeams", 0, -1);
-    const teams = [];
-    for (let i = res.length - 1; i >= 0; i--) {
-      let curTeamId = res[i];
-      teams.push({team_id: curTeamId});
-    }
-    return teams;// a list of team ids with ranking
-  };
 
   return mu;
 
